@@ -3,22 +3,40 @@
 #include <limits.h>
 
 #include "constants.h"
+#include "textures.h"
+
+// const int map[MAP_NUM_ROWS][MAP_NUM_COLS] = {
+//     {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ,1, 1, 1, 1, 1, 1, 1},
+//     {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+//     {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+//     {1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1},
+//     {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+//     {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1},
+//     {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1},
+//     {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1},
+//     {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 1},
+//     {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+//     {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+//     {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+//     {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
+
+// };
+
 
 const int map[MAP_NUM_ROWS][MAP_NUM_COLS] = {
     {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ,1, 1, 1, 1, 1, 1, 1},
+    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1},
+    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 0, 0, 0, 1},
     {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-    {1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1},
-    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1},
-    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1},
-    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1},
-    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 1},
-    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+    {1, 0, 0, 0, 2, 2, 0, 3, 0, 4, 0, 5, 0, 6, 0, 0, 0, 0, 0, 1},
+    {1, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+    {1, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 4, 0, 0, 1},
+    {1, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1},
+    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1},
+    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1},
     {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
-
 };
 
 struct Ray
@@ -59,6 +77,7 @@ Uint32* colorBuffer = NULL;
 SDL_Texture* colorBufferTexture;
 
 Uint32* wallTexture = NULL;
+Uint32* textures[NUM_TEXTURES];
 
 int initializeWindow()
 {
@@ -443,17 +462,27 @@ void setup()
 		WINDOW_HEIGHT
 	);
 
-	wallTexture = (Uint32 *)malloc(sizeof(Uint32) * (Uint32)TEXTURE_WIDTH * (Uint32)TEXTURE_HEIGHT);
+	// wallTexture = (Uint32 *)malloc(sizeof(Uint32) * (Uint32)TEXTURE_WIDTH * (Uint32)TEXTURE_HEIGHT);
 
-	// load/create texture image here (blue-black line pattern)
+	// // load/create texture image here (blue-black line pattern)
 
-	for (int x = 0; x < TEXTURE_WIDTH; x++)
-	{
-		for (int y = 0; y < TEXTURE_HEIGHT; y++)
-		{
-			wallTexture[(TEXTURE_WIDTH * y) + x] = ((x % 8) && (y % 8)) ? 0xFF0000FF : 0xFF000000; // if the coordinate is a multiple of 8....
-		}
-	}
+	// for (int x = 0; x < TEXTURE_WIDTH; x++)
+	// {
+	// 	for (int y = 0; y < TEXTURE_HEIGHT; y++)
+	// 	{
+	// 		wallTexture[(TEXTURE_WIDTH * y) + x] = ((x % 8) && (y % 8)) ? 0xFF0000FF : 0xFF000000; // if the coordinate is a multiple of 8....
+	// 	}
+	// }
+
+	// loading texture arrays from the header file
+	textures[0] = (Uint32 *)REDBRICK_TEXTURE;
+	textures[1] = (Uint32 *)PURPLESTONE_TEXTURE;
+	textures[2] = (Uint32 *)MOSSYSTONE_TEXTURE;
+	textures[3] = (Uint32 *)GRAYSTONE_TEXTURE;
+	textures[4] = (Uint32 *)COLORSTONE_TEXTURE;
+	textures[5] = (Uint32 *)BLUESTONE_TEXTURE;
+	textures[6] = (Uint32 *)WOOD_TEXTURE;
+	textures[7] = (Uint32 *)EAGLE_TEXTURE;
 }
 
 void update()
@@ -521,13 +550,18 @@ void generateProjection()
 			textureOffsetX = (int)rays[i].wallHitX % TILE_SIZE; // how much offset in y
 		}
 
+		// get the texture number from the map array above
+		int texNum = rays[i].wallHitContent - 1;
+
 		for (int y = wallTopPixel; y <wallBottomPixel; y++)
 		{
-			int textureOffsetY = y - wallTopPixel;
+			int distanceFromTop = (y + (wallStripHeight / 2)) - (WINDOW_HEIGHT / 2);
+			int textureOffsetY =  distanceFromTop * ((float)TEXTURE_HEIGHT / (float)wallStripHeight);
 			// set color of the wall to the color from the texture
 
 			// colorBuffer[(WINDOW_WIDTH * y) + i] = rays[i].wasHitVertical ? 0xFFFFFFFF : 0xFFCCCCCC;
-			Uint32 texelColor = wallTexture[(TEXTURE_WIDTH * textureOffsetY) + textureOffsetX];
+			// Uint32 texelColor = wallTexture[(TEXTURE_WIDTH * textureOffsetY) + textureOffsetX];
+			Uint32 texelColor = textures[texNum][(TEXTURE_WIDTH * textureOffsetY) + textureOffsetX];
 			colorBuffer[(WINDOW_WIDTH * y) + i] = texelColor;
 		}
 
