@@ -17,8 +17,7 @@
 #define FOV_ANGLE (60 * (PI / 180))
 #define NUM_RAYS WINDOW_WIDTH
 
-#define FPS 30
+#define FPS 60
 #define FRAME_TIME_LENGTH (1000 / FPS)
 
-#define TEXTURE_WIDTH 64
-#define TEXTURE_HEIGHT 64
+

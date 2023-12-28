@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdint.h>
 #include <SDL2/SDL.h>
 #include <limits.h>
 
@@ -26,7 +27,7 @@
 const int map[MAP_NUM_ROWS][MAP_NUM_COLS] = {
     {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ,1, 1, 1, 1, 1, 1, 1},
     {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1},
-    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 0, 0, 0, 1},
+    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 1},
     {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
     {1, 0, 0, 0, 2, 2, 0, 3, 0, 4, 0, 5, 0, 6, 0, 0, 0, 0, 0, 1},
     {1, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
@@ -72,12 +73,11 @@ SDL_Renderer *renderer = NULL;
 int isGameRunning = 0;
 int ticksLastFrame = 0;
 
-Uint32* colorBuffer = NULL;
+uint32_t* colorBuffer = NULL;
 
 SDL_Texture* colorBufferTexture;
 
-Uint32* wallTexture = NULL;
-Uint32* textures[NUM_TEXTURES];
+uint32_t* textures[NUM_TEXTURES];
 
 int initializeWindow()
 {
@@ -116,6 +116,7 @@ int initializeWindow()
 
 void destroyWindow()
 {
+	freeWallTextures();
 	free(colorBuffer);
 	
 	SDL_DestroyTexture(colorBufferTexture);
@@ -451,18 +452,18 @@ void setup()
 	player.turnSpeed = 45 * (PI /180);
 
 	// allocating memory to the color buffer 
-	colorBuffer = (Uint32 *)malloc(sizeof(Uint32) * (Uint32)WINDOW_HEIGHT * (Uint32)WINDOW_WIDTH);
+	colorBuffer = (uint32_t *)malloc(sizeof(uint32_t) * (uint32_t)WINDOW_HEIGHT * (uint32_t)WINDOW_WIDTH);
 
 	// create an SDL Texture to display the color buffer
 	colorBufferTexture = SDL_CreateTexture(
 		renderer,
-		SDL_PIXELFORMAT_ARGB8888,
+		SDL_PIXELFORMAT_RGBA32,
 		SDL_TEXTUREACCESS_STREAMING, // how do you want to change the texture? This one changes it frame by frame
 		WINDOW_WIDTH,
 		WINDOW_HEIGHT
 	);
 
-	// wallTexture = (Uint32 *)malloc(sizeof(Uint32) * (Uint32)TEXTURE_WIDTH * (Uint32)TEXTURE_HEIGHT);
+	// wallTexture = (uint32_t *)malloc(sizeof(uint32_t) * (uint32_t)TEXTURE_WIDTH * (uint32_t)TEXTURE_HEIGHT);
 
 	// // load/create texture image here (blue-black line pattern)
 
@@ -475,14 +476,16 @@ void setup()
 	// }
 
 	// loading texture arrays from the header file
-	textures[0] = (Uint32 *)REDBRICK_TEXTURE;
-	textures[1] = (Uint32 *)PURPLESTONE_TEXTURE;
-	textures[2] = (Uint32 *)MOSSYSTONE_TEXTURE;
-	textures[3] = (Uint32 *)GRAYSTONE_TEXTURE;
-	textures[4] = (Uint32 *)COLORSTONE_TEXTURE;
-	textures[5] = (Uint32 *)BLUESTONE_TEXTURE;
-	textures[6] = (Uint32 *)WOOD_TEXTURE;
-	textures[7] = (Uint32 *)EAGLE_TEXTURE;
+	// textures[0] = (uint32_t *)REDBRICK_TEXTURE;
+	// textures[1] = (uint32_t *)PURPLESTONE_TEXTURE;
+	// textures[2] = (uint32_t *)MOSSYSTONE_TEXTURE;
+	// textures[3] = (uint32_t *)GRAYSTONE_TEXTURE;
+	// textures[4] = (uint32_t *)COLORSTONE_TEXTURE;
+	// textures[5] = (uint32_t *)BLUESTONE_TEXTURE;
+	// textures[6] = (uint32_t *)WOOD_TEXTURE;
+	// textures[7] = (uint32_t *)EAGLE_TEXTURE;
+
+	loadWallTextures();
 }
 
 void update()
@@ -530,7 +533,7 @@ void generateProjection()
 
 		for (int y = 0; y < wallTopPixel; y++)
 		{
-			colorBuffer[(WINDOW_WIDTH * y) + i] = 0xFFDDDDDD;
+			colorBuffer[(WINDOW_WIDTH * y) + i] = 0xFF222222;
 		}
 
 		// wall
@@ -553,33 +556,36 @@ void generateProjection()
 		// get the texture number from the map array above
 		int texNum = rays[i].wallHitContent - 1;
 
+		int texture_width = wallTexture[texNum].width;
+		int texture_height = wallTexture[texNum].height;
+
 		for (int y = wallTopPixel; y <wallBottomPixel; y++)
 		{
 			int distanceFromTop = (y + (wallStripHeight / 2)) - (WINDOW_HEIGHT / 2);
-			int textureOffsetY =  distanceFromTop * ((float)TEXTURE_HEIGHT / (float)wallStripHeight);
+			int textureOffsetY =  distanceFromTop * ((float)texture_height / (float)wallStripHeight);
 			// set color of the wall to the color from the texture
 
 			// colorBuffer[(WINDOW_WIDTH * y) + i] = rays[i].wasHitVertical ? 0xFFFFFFFF : 0xFFCCCCCC;
-			// Uint32 texelColor = wallTexture[(TEXTURE_WIDTH * textureOffsetY) + textureOffsetX];
-			Uint32 texelColor = textures[texNum][(TEXTURE_WIDTH * textureOffsetY) + textureOffsetX];
+			// uint32_t texelColor = wallTexture[(TEXTURE_WIDTH * textureOffsetY) + textureOffsetX];
+			uint32_t texelColor = wallTexture[texNum].texture_buffer[(texture_width * textureOffsetY) + textureOffsetX];
 			colorBuffer[(WINDOW_WIDTH * y) + i] = texelColor;
 		}
 
 		// floor
 		for (int y = wallBottomPixel; y < WINDOW_HEIGHT; y++)
 		{
-			colorBuffer[(WINDOW_WIDTH * y) + i] = 0xFFEEEEEE;
+			colorBuffer[(WINDOW_WIDTH * y) + i] = 0xFF666666;
 		}
 	}
 }
 
-void clearColorBuffer(Uint32 color)
+void clearColorBuffer(uint32_t color)
 {
 	for (int x = 0; x < WINDOW_WIDTH; x++)
 	{
 		for (int y = 0; y < WINDOW_HEIGHT; y++)
 		{
-			colorBuffer[(WINDOW_WIDTH * y) + x] = 0xFF000000;
+			colorBuffer[(WINDOW_WIDTH * y) + x] = color;
 		}
 	}
 }
@@ -590,7 +596,7 @@ void renderColorBuffer()
 		colorBufferTexture, 
 		NULL, 
 		colorBuffer, 
-		(int)((Uint32)WINDOW_WIDTH * sizeof(Uint32))
+		(int)((uint32_t)WINDOW_WIDTH * sizeof(uint32_t))
 		);
 		SDL_RenderCopy(renderer, colorBufferTexture, NULL, NULL);
 }
@@ -608,7 +614,7 @@ void render()
 	renderColorBuffer();
 
 	// clear color buffer
-	clearColorBuffer(0xFF00000);
+	clearColorBuffer(0xFF000000);
 
 	// minimap
 	renderMap();
